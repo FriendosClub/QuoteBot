@@ -38,9 +38,11 @@ def db_get_quote_channel(guild_id: int) -> int:
     """
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
+
     cursor.execute('SELECT quote_channel FROM guilds WHERE id=?', (guild_id,))
-    # Guild IDs/entries are unique, so there will only be one result.
+    # Guild IDs/entries are unique, so there will only be zero or one results.
     result = cursor.fetchone()
+
     conn.close()
 
     if not result:
@@ -91,7 +93,14 @@ async def ping(ctx):
 @commands.guild_only()
 @bot.command()
 async def set_quote_channel(ctx, channel: discord.TextChannel):
-    pass
+    server_id = ctx.guild.id
+    channel_id = channel.id
+
+    if db_set_quote_channel(server_id, channel_id):
+        await ctx.send('Quote channel for {} is now {}.'
+                       .format(ctx.guild.name, channel.mention))
+    else:
+        await ctx.send('Unable to update channel.')
 
 
 # TODO: Take an arbitrary number of msg_id arguments.
@@ -129,4 +138,5 @@ async def quote(ctx, channel: discord.TextChannel, msg_id: int):
     await ctx.send('Quoted!')
 
 
+db_init()
 bot.run(token)
