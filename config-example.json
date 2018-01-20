@@ -1,3 +1,4 @@
 {
-    "token": "your-token-here"
+    "token": "your-token-here",
+    "db_file": "quotebot.db"
 }
