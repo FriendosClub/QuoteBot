@@ -22,7 +22,7 @@ def db_init():
                    (guild_id INTEGER NOT NULL UNIQUE,
                     quote_channel INTEGER NOT NULL,
                     quote_count INTEGER NOT NULL DEFAULT 0 CHECK(quote_count >= 0),
-                    PRIMARY KEY guild_id)''')
+                    PRIMARY KEY(guild_id))''')
     conn.commit()
     conn.close()
 
