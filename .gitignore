@@ -1,5 +1,6 @@
 ## Sensitive data
 config.json
+quotebot.db
 
 ## ST3 files
 *.sublime-project

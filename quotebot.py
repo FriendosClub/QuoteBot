@@ -3,8 +3,14 @@ import json
 import sqlite3
 from discord.ext import commands
 
+# Debugging
+print('Loading quotebot...')
+
 # Read our bot token from the configuration file
 with open('config.json') as cfg_file:
+    # Debugging
+    print('Reading configuration file...')
+
     cfg = json.load(cfg_file)
     token = cfg['token']
     db_file = cfg['db_file']
@@ -16,6 +22,10 @@ bot = commands.Bot(command_prefix=commands.when_mentioned)
 def db_init():
     """Initializes the table(s) in the DB
     """
+
+    # Debugging
+    print('Initializing database...')
+
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS guilds
@@ -28,18 +38,18 @@ def db_init():
 
 
 def db_get_quote_channel(guild_id: int) -> int:
-    """Retrieve the ID of the channel for posting quotes
+    """Retrieve the ID of the channel for posting quotes.
 
     Args:
-        guild_id (int): ID of the specific guild
+        guild_id (int): ID of the specific guild.
 
     Returns:
-        int: The quote channel ID
+        int: The quote channel ID or `None` if no entry is present in the DB.
     """
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT quote_channel FROM guilds WHERE id=?', (guild_id,))
+    cursor.execute('SELECT quote_channel FROM guilds WHERE guild_id=?', (guild_id,))
     # Guild IDs/entries are unique, so there will only be zero or one results.
     result = cursor.fetchone()
 
@@ -106,7 +116,7 @@ async def set_quote_channel(ctx, channel: discord.TextChannel):
 # TODO: Take an arbitrary number of msg_id arguments.
 @commands.guild_only()
 @bot.command()
-async def quote(ctx, channel: discord.TextChannel, msg_id: int):
+async def quote(ctx, msg_id: int, channel: discord.TextChannel):
     if channel is None:
         await ctx.send('A channel with that name doesn\'t exist!')
         return
@@ -133,10 +143,21 @@ async def quote(ctx, channel: discord.TextChannel, msg_id: int):
     if msg.attachments and hasattr(msg.attachments[0], 'height'):
         e.set_image(url=msg.attachments[0].url)
 
+    quote_channel_id = db_get_quote_channel(ctx.guild.id)
     quote_channel = bot.get_channel(quote_channel_id)
+
+    if quote_channel is None:
+        await ctx.send('You haven\'t specified a quote channel!' +
+                       'You can set one with `set_quote_channel #channel`.')
+        return
+
     await quote_channel.send(embed=e)
     await ctx.send('Quoted!')
 
 
 db_init()
+
+# Debugging
+print('Starting quotebot...')
+
 bot.run(token)
