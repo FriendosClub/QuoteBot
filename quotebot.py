@@ -1,3 +1,10 @@
+# TODO:
+#  - Implement `unquote` command
+#  - Update `stats` command to include global stats
+#  - Implement a `create_quote_channel` command
+#  - Look into using an actual database rather than sqlite
+#  - More testing!!!
+
 import discord
 import json
 from lib.db_helper import DBHelper
@@ -39,6 +46,7 @@ async def ping(ctx):
 
 
 @commands.guild_only()
+@commands.has_permissions(administrator=True)
 @bot.command()
 async def set_quote_channel(ctx, channel: discord.TextChannel):
     """Set the text channel all quoted messages for a guild are embedded in.
