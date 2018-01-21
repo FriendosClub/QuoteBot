@@ -1,6 +1,7 @@
 import discord
 import json
-import sqlite3
+from lib.db_helper import DBHelper
+from lib.error_handler_clean import CommandErrorHandler
 from discord.ext import commands
 
 # Debugging
@@ -15,111 +16,68 @@ with open('config.json') as cfg_file:
     token = cfg['token']
     db_file = cfg['db_file']
 
+# Initialize our DB Helper object
+dbh = DBHelper(db_file)
+
 # Set up our bot insance
 bot = commands.Bot(command_prefix=commands.when_mentioned)
 
 
-def db_init():
-    """Initializes the table(s) in the DB
-    """
-
-    # Debugging
-    print('Initializing database...')
-
-    conn = sqlite3.connect(db_file)
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS guilds
-                   (guild_id INTEGER NOT NULL UNIQUE,
-                    quote_channel INTEGER NOT NULL,
-                    quote_count INTEGER NOT NULL DEFAULT 0 CHECK(quote_count >= 0),
-                    PRIMARY KEY(guild_id))''')
-    conn.commit()
-    conn.close()
-
-
-def db_get_quote_channel(guild_id: int) -> int:
-    """Retrieve the ID of the channel for posting quotes.
-
-    Args:
-        guild_id (int): ID of the specific guild.
-
-    Returns:
-        int: The quote channel ID or `None` if no entry is present in the DB.
-    """
-    conn = sqlite3.connect(db_file)
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT quote_channel FROM guilds WHERE guild_id=?', (guild_id,))
-    # Guild IDs/entries are unique, so there will only be zero or one results.
-    result = cursor.fetchone()
-
-    conn.close()
-
-    if not result:
-        return None
-    else:
-        # Return the only item in the tuple
-        return result[0]
-
-
-def db_set_quote_channel(guild_id: int, channel_id: int) -> bool:
-    """Inserts or updates the required information for a guild.
-
-    Args:
-        guild_id (int): The ID of the guild
-        channel_id (int): The ID of the quote channel
-
-    Returns:
-        bool: True if the insert/update succeeded.
-    """
-    conn = sqlite3.connect(db_file)
-    cursor = conn.cursor()
-
-    result = False
-
-    q = '''INSERT OR REPLACE INTO guilds (guild_id, quote_channel, quote_count)
-           VALUES (?, ?, (SELECT quote_count FROM guilds WHERE guild_id=?))'''
-
-    # TODO: Implement error handling for this query (CHECK fail, etc.)
-    cursor.execute(q, (guild_id, channel_id, guild_id))
-    result = True
-
-    conn.commit()
-    conn.close()
-    return result
-
-
 @bot.event
 async def on_ready():
+    """Actions executed when the bot is logged in and available.
+    """
     print('Logged in as {}#{}'.format(bot.user.name, bot.user.discriminator))
 
 
 @commands.guild_only()
 @bot.command()
 async def ping(ctx):
+    """Simple command to ensure the bot is working.
+    """
     await ctx.send('Pong!')
 
 
 @commands.guild_only()
 @bot.command()
 async def set_quote_channel(ctx, channel: discord.TextChannel):
+    """Set the text channel all quoted messages for a guild are embedded in.
+
+    Args:
+        channel (discord.TextChannel): The channel's mention, i.e. #general.
+    """
     server_id = ctx.guild.id
     channel_id = channel.id
 
-    if db_set_quote_channel(server_id, channel_id):
+    if dbh.set_quote_channel(server_id, channel_id):
         await ctx.send('Quote channel for {} is now {}.'
                        .format(ctx.guild.name, channel.mention))
     else:
         await ctx.send('Unable to update channel.')
 
 
+@commands.guild_only()
+@bot.command()
+async def stats(ctx):
+    """Print some QuoteBot statistics in chat.
+    """
+    local_qc = dbh.get_quote_count(ctx.guild.id)
+    await ctx.send("I've quoted {} messages from {}"
+                   .format(local_qc, ctx.guild.name))
+
+
 # TODO: Take an arbitrary number of msg_id arguments.
 @commands.guild_only()
 @bot.command()
-async def quote(ctx, msg_id: int, channel: discord.TextChannel):
+async def quote(ctx, msg_id: int, channel: discord.TextChannel = None):
+    """Quote a message.
+
+    Args:
+        msg_id (int): The ID of the message (... > Copy ID)
+        channel (discord.TextChannel, optional): Which channel the message is in.
+    """
     if channel is None:
-        await ctx.send('A channel with that name doesn\'t exist!')
-        return
+        channel = ctx.message.channel
 
     try:
         msg = await channel.get_message(msg_id)
@@ -143,7 +101,7 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel):
     if msg.attachments and hasattr(msg.attachments[0], 'height'):
         e.set_image(url=msg.attachments[0].url)
 
-    quote_channel_id = db_get_quote_channel(ctx.guild.id)
+    quote_channel_id = dbh.get_quote_channel(ctx.guild.id)
     quote_channel = bot.get_channel(quote_channel_id)
 
     if quote_channel is None:
@@ -151,13 +109,22 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel):
                        'You can set one with `set_quote_channel #channel`.')
         return
 
+    dbh.update_quote_count(ctx.guild.id)
+
     await quote_channel.send(embed=e)
     await ctx.send('Quoted!')
 
 
-db_init()
+@quote.error
+async def quote_error_handler(ctx, error):
+    if isinstance(error, commands.BadArgument):
+            await ctx.send('That channel doesn\'t exist!')
+
+
+# Debugging
+print('Adding CommandErrorHandler to bot...')
+bot.add_cog(CommandErrorHandler(bot))
 
 # Debugging
 print('Starting quotebot...')
-
 bot.run(token)
