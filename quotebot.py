@@ -27,21 +27,6 @@ dbh = DBHelper(db_file)
 bot = commands.Bot(command_prefix=commands.when_mentioned)
 
 
-@bot.event
-async def on_ready():
-    """Actions executed when the bot is logged in and available.
-    """
-    print(f"Logged in as {bot.user.name}#{bot.user.discriminator}")
-
-
-@commands.guild_only()
-@bot.command()
-async def ping(ctx):
-    """Simple command to ensure the bot is working.
-    """
-    await ctx.send("Pong!")
-
-
 # TODO: Error handler for incorrect channel
 @commands.guild_only()
 @commands.has_permissions(administrator=True)
@@ -124,15 +109,23 @@ async def quote_error_handler(ctx, error):
             await ctx.send("That channel doesn't exist!")
 
 
+@bot.event
+async def on_ready():
+    """Actions executed when the bot is logged in and available.
+    """
+    print(f"Logged in as {bot.user.name}#{bot.user.discriminator}")
+
+
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
-    extensions = ['cogs.error_handler']
+    extensions = ['cogs.error_handler', 'cogs.ping']
     for extension in extensions:
         try:
             bot.load_extension(extension)
         except Exception as e:
             print(f"Failed to load extension {extension}")
 
-    print("Starting quotebot...")
-    bot.run(token)
+
+print("Starting quotebot...")
+bot.run(token, reconnect=True)
