@@ -8,16 +8,13 @@
 import discord
 import json
 from lib.db_helper import DBHelper
-from lib.error_handler_clean import CommandErrorHandler
 from discord.ext import commands
 
-# Debugging
-print('Loading quotebot...')
+print("Loading quotebot...")
 
 # Read our bot token from the configuration file
 with open('config.json') as cfg_file:
-    # Debugging
-    print('Reading configuration file...')
+    print("Reading configuration file...")
 
     cfg = json.load(cfg_file)
     token = cfg['token']
@@ -34,7 +31,7 @@ bot = commands.Bot(command_prefix=commands.when_mentioned)
 async def on_ready():
     """Actions executed when the bot is logged in and available.
     """
-    print('Logged in as {}#{}'.format(bot.user.name, bot.user.discriminator))
+    print(f"Logged in as {bot.user.name}#{bot.user.discriminator}")
 
 
 @commands.guild_only()
@@ -42,9 +39,10 @@ async def on_ready():
 async def ping(ctx):
     """Simple command to ensure the bot is working.
     """
-    await ctx.send('Pong!')
+    await ctx.send("Pong!")
 
 
+# TODO: Error handler for incorrect channel
 @commands.guild_only()
 @commands.has_permissions(administrator=True)
 @bot.command()
@@ -58,10 +56,9 @@ async def set_quote_channel(ctx, channel: discord.TextChannel):
     channel_id = channel.id
 
     if dbh.set_quote_channel(server_id, channel_id):
-        await ctx.send('Quote channel for {} is now {}.'
-                       .format(ctx.guild.name, channel.mention))
+        await ctx.send(f"Quote channel for {ctx.guild.name} is now {channel.mention}.")
     else:
-        await ctx.send('Unable to update channel.')
+        await ctx.send("Unable to update channel.")
 
 
 @commands.guild_only()
@@ -70,8 +67,7 @@ async def stats(ctx):
     """Print some QuoteBot statistics in chat.
     """
     local_qc = dbh.get_quote_count(ctx.guild.id)
-    await ctx.send("I've quoted {} messages from {}"
-                   .format(local_qc, ctx.guild.name))
+    await ctx.send(f"I've quoted {local_qc} messages from {ctx.guild.name}")
 
 
 # TODO: Take an arbitrary number of msg_id arguments.
@@ -82,7 +78,7 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel = None):
 
     Args:
         msg_id (int): The ID of the message (... > Copy ID)
-        channel (discord.TextChannel, optional): Which channel the message is in.
+        channel (discord.TextChannel, optional): Which channel to search.
     """
     if channel is None:
         channel = ctx.message.channel
@@ -90,14 +86,13 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel = None):
     try:
         msg = await channel.get_message(msg_id)
     except discord.NotFound:
-        await ctx.send('No message exists with that ID.')
+        await ctx.send("No message exists with that ID.")
         return
     except discord.Forbidden:
-        await ctx.send('I don\'t have permission to access that channel.')
+        await ctx.send("I don't have permission to access that channel.")
         return
-    except discord.HTTPException as httpe:
-        await ctx.send('Got error code {} trying to retrieve message.'
-                       .format(httpe.code))
+    except discord.HTTPException as he:
+        await ctx.send(f"Got error code {he.code} trying to retrieve message.")
         return
 
     e = discord.Embed(description=msg.content, color=msg.author.color)
@@ -113,26 +108,31 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel = None):
     quote_channel = bot.get_channel(quote_channel_id)
 
     if quote_channel is None:
-        await ctx.send('You haven\'t specified a quote channel!' +
-                       'You can set one with `set_quote_channel #channel`.')
+        await ctx.send("You haven't specified a quote channel! " +
+                       "You can set one with `set_quote_channel #channel`.")
         return
 
     dbh.update_quote_count(ctx.guild.id)
 
     await quote_channel.send(embed=e)
-    await ctx.send('Quoted!')
+    await ctx.send("Quoted!")
 
 
 @quote.error
 async def quote_error_handler(ctx, error):
     if isinstance(error, commands.BadArgument):
-            await ctx.send('That channel doesn\'t exist!')
+            await ctx.send("That channel doesn't exist!")
 
 
-# Debugging
-print('Adding CommandErrorHandler to bot...')
-bot.add_cog(CommandErrorHandler(bot))
+if __name__ == '__main__':
+    # Load all our cogs, then run the bot
+    print("Loading extensions...")
+    extensions = ['cogs.error_handler']
+    for extension in extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            print(f"Failed to load extension {extension}")
 
-# Debugging
-print('Starting quotebot...')
-bot.run(token)
+    print("Starting quotebot...")
+    bot.run(token)

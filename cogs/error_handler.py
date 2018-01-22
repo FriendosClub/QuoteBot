@@ -34,7 +34,7 @@ class CommandErrorHandler:
         elif isinstance(error, commands.NoPrivateMessage):
             try:
                 return await ctx.author.send(f'{ctx.command} can not be used in Private Messages.')
-            except:
+            except Exception:
                 pass
 
         elif isinstance(error, commands.BadArgument):
@@ -46,15 +46,15 @@ class CommandErrorHandler:
         traceback.print_exception(type(error), error, error.__traceback__,
                                   file=sys.stderr)
 
-    @commands.command(name='repeat', aliases=['mimic', 'copy'])
-    async def do_repeat(self, ctx, *, inp: str):
-        await ctx.send(inp)
+    # @commands.command(name='repeat', aliases=['mimic', 'copy'])
+    # async def do_repeat(self, ctx, *, inp: str):
+    #     await ctx.send(inp)
 
-    @do_repeat.error
-    async def do_repeat_handler(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param == 'inp':
-                await ctx.send("You forgot to give me input to repeat!")
+    # @do_repeat.error
+    # async def do_repeat_handler(self, ctx, error):
+    #     if isinstance(error, commands.MissingRequiredArgument):
+    #         if error.param == 'inp':
+    #             await ctx.send("You forgot to give me input to repeat!")
 
 
 def setup(bot):
