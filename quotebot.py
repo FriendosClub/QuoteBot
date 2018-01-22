@@ -27,25 +27,6 @@ bot = commands.Bot(command_prefix=commands.when_mentioned)
 bot.dbh = DBHelper(db_file)
 
 
-# TODO: Error handler for incorrect channel
-@commands.guild_only()
-@commands.has_permissions(administrator=True)
-@bot.command()
-async def set_quote_channel(ctx, channel: discord.TextChannel):
-    """Set the text channel all quoted messages for a guild are embedded in.
-
-    Args:
-        channel (discord.TextChannel): The channel's mention, i.e. #general.
-    """
-    server_id = ctx.guild.id
-    channel_id = channel.id
-
-    if bot.dbh.set_quote_channel(server_id, channel_id):
-        await ctx.send(f"Quote channel for {ctx.guild.name} is now {channel.mention}.")
-    else:
-        await ctx.send("Unable to update channel.")
-
-
 # TODO: Take an arbitrary number of msg_id arguments.
 @commands.guild_only()
 @bot.command()
@@ -110,7 +91,10 @@ async def on_ready():
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
-    extensions = ['cogs.error_handler', 'cogs.ping', 'cogs.stats']
+    extensions = ['cogs.error_handler',
+                  'cogs.ping',
+                  'cogs.stats',
+                  'cogs.guild_config']
     for extension in extensions:
         try:
             bot.load_extension(extension)
