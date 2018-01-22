@@ -37,7 +37,7 @@ async def on_ready():
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
-    extensions = ['cogs.error_handler',
+    extensions = [#'cogs.error_handler',
                   'cogs.ping',
                   'cogs.stats',
                   'cogs.guild_config',
@@ -46,7 +46,9 @@ if __name__ == '__main__':
         try:
             bot.load_extension(extension)
         except Exception as e:
-            print(f"Failed to load extension {extension}")
+            print(f"> Failed to load extension {extension}")
+        else:
+            print(f"> Loaded {extension[5:]}")
 
 
 print("Starting quotebot...")
