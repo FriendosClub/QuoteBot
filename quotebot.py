@@ -20,11 +20,11 @@ with open('config.json') as cfg_file:
     token = cfg['token']
     db_file = cfg['db_file']
 
-# Initialize our DB Helper object
-dbh = DBHelper(db_file)
-
 # Set up our bot insance
 bot = commands.Bot(command_prefix=commands.when_mentioned)
+
+# Initialize our DB Helper object
+bot.dbh = DBHelper(db_file)
 
 
 # TODO: Error handler for incorrect channel
@@ -40,19 +40,10 @@ async def set_quote_channel(ctx, channel: discord.TextChannel):
     server_id = ctx.guild.id
     channel_id = channel.id
 
-    if dbh.set_quote_channel(server_id, channel_id):
+    if bot.dbh.set_quote_channel(server_id, channel_id):
         await ctx.send(f"Quote channel for {ctx.guild.name} is now {channel.mention}.")
     else:
         await ctx.send("Unable to update channel.")
-
-
-@commands.guild_only()
-@bot.command()
-async def stats(ctx):
-    """Print some QuoteBot statistics in chat.
-    """
-    local_qc = dbh.get_quote_count(ctx.guild.id)
-    await ctx.send(f"I've quoted {local_qc} messages from {ctx.guild.name}")
 
 
 # TODO: Take an arbitrary number of msg_id arguments.
@@ -89,7 +80,7 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel = None):
     if msg.attachments and hasattr(msg.attachments[0], 'height'):
         e.set_image(url=msg.attachments[0].url)
 
-    quote_channel_id = dbh.get_quote_channel(ctx.guild.id)
+    quote_channel_id = bot.dbh.get_quote_channel(ctx.guild.id)
     quote_channel = bot.get_channel(quote_channel_id)
 
     if quote_channel is None:
@@ -97,7 +88,7 @@ async def quote(ctx, msg_id: int, channel: discord.TextChannel = None):
                        "You can set one with `set_quote_channel #channel`.")
         return
 
-    dbh.update_quote_count(ctx.guild.id)
+    bot.dbh.update_quote_count(ctx.guild.id)
 
     await quote_channel.send(embed=e)
     await ctx.send("Quoted!")
@@ -119,7 +110,7 @@ async def on_ready():
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
-    extensions = ['cogs.error_handler', 'cogs.ping']
+    extensions = ['cogs.error_handler', 'cogs.ping', 'cogs.stats']
     for extension in extensions:
         try:
             bot.load_extension(extension)
