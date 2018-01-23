@@ -22,17 +22,30 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 3. Copy `config_default.json` to `config.json` and enter your bot token.
 4. Run the bot with `python[3] quotebot.py`.
 
-### To-Do
+### v1.0 Roadmap
 
-- [ ] Write help/usage documentation
-- [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
 - [x] Make command `qc set` admin-only.
-- [ ] Update the `stats` command to display global stats as well.
 - [x] Update `quote` command to take an arbitrary number of message IDs.
 - [x] Add `quote` subcommand so users can specify a channel.
+- [ ] Update the `stats` command to display global stats as an embed.
 - [ ] Update `quote` command to handle non-image attachments.
 - [ ] Update `quote` command to handle up to 10 attachments.
+- [ ] Update `quote` command to handle embeds (e.g. YouTube videos).
 - [ ] Implement `unquote` command.
-- [ ] ~~Implement a `create_quote_channel` (admin only) command.~~
+- [ ] Create a more verbose `on_ready` message.
+- [ ] Add logging for invites, database manipulation, errors.
+- [ ] Update command help/usage and documentation.
+- [ ] Implement DMing of help to users who request it.
+- [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
+
+### v2.0 Roadmap
+
+**R&D of these features will begin if/when the bot has joined 500 guilds.**
+
+_Most of these features are theoretical and may or may not be implemented._
+
+- [ ] Refactor from `commands.Bot` to `commands.AutoShardedBot`.
+- [ ] Implement cross-guild quoting.
 - [ ] Add SQL server functionality.
-- [ ] More testing and bugfixes.
+- [ ] Add more fields to the `guilds` table so stats can show "top" servers.
+- [ ] Implement relational table to keep track of specific quoted messages.
