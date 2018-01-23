@@ -10,14 +10,13 @@ with open('config.json') as cfg_file:
     print("Reading configuration file...")
 
     cfg = json.load(cfg_file)
-    token = cfg['token']
-    db_file = cfg['db_file']
 
 # Set up our bot insance
-bot = commands.Bot(command_prefix=commands.when_mentioned)
+bot = commands.Bot(command_prefix=commands.when_mentioned,
+                   owner_id=cfg['owner_id'])
 
 # Initialize our DB Helper object
-bot.dbh = DBHelper(db_file)
+bot.dbh = DBHelper(cfg['db_file'])
 
 
 @bot.event
@@ -30,8 +29,7 @@ async def on_ready():
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
-    extensions = [#'cogs.error_handler',
-                  'cogs.ping',
+    extensions = ['cogs.ping',
                   'cogs.stats',
                   'cogs.guild_config',
                   'cogs.quote']
@@ -46,4 +44,4 @@ if __name__ == '__main__':
 
 
 print("Starting quotebot...")
-bot.run(token, reconnect=True)
+bot.run(cfg['token'], reconnect=True)

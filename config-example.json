@@ -1,4 +1,5 @@
 {
     "token": "your-token-here",
+    "owner_id": 143123353249513472,
     "db_file": "quotebot.db"
 }
