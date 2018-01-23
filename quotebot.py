@@ -1,10 +1,3 @@
-# TODO:
-#  - Implement `unquote` command
-#  - Update `stats` command to include global stats
-#  - Implement a `create_quote_channel` command
-#  - Look into using an actual database rather than sqlite
-#  - More testing!!!
-
 import discord
 import json
 from lib.db_helper import DBHelper
@@ -47,6 +40,7 @@ if __name__ == '__main__':
             bot.load_extension(extension)
         except Exception as e:
             print(f"> Failed to load extension {extension}")
+            raise e
         else:
             print(f"> Loaded {extension[5:]}")
 

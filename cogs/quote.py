@@ -6,10 +6,9 @@ class QuoteCog:
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: Figure out how to process `channel` since it is now a named argument.
     @commands.guild_only()
-    @commands.command()
-    async def quote(self, ctx, *msg_ids, channel: discord.TextChannel = None):
+    @commands.group(invoke_without_command=True)
+    async def quote(self, ctx, *msg_ids):
         """Quote a message.
 
         Args:
@@ -28,10 +27,13 @@ class QuoteCog:
                            "You can set one with `set_quote_channel #channel`.")
             return
 
-        if not channel:
+        if hasattr(ctx, 'other_channel'):
+            channel = ctx.other_channel
+        else:
             channel = ctx.message.channel
 
-        # TODO: Refactor this loop
+        num_quoted = 0
+
         for msg_id in msg_ids:
             try:
                 msg = await channel.get_message(msg_id)
@@ -39,13 +41,21 @@ class QuoteCog:
                 await ctx.send("No message exists with that ID.")
                 continue
             except discord.Forbidden:
-                await ctx.send("I don't have permission to access that channel.")
+                await ctx.send("I can't access that channel.")
                 continue
             except discord.HTTPException as he:
-                await ctx.send(f"Got error code {he.status} trying to retrieve message.")
+                # TODO: Maybe add conditionals for different error codes
+                await ctx.send(f"Got error code {he.status} " +
+                               "trying to retrieve message.")
                 continue
 
-            e = discord.Embed(description=msg.content, color=msg.author.color)
+            # Users who left the server have no attribute "color"
+            if hasattr(msg.author, 'color'):
+                author_color = msg.author.color
+            else:
+                author_color = discord.Colour(0xFFFFFF)
+
+            e = discord.Embed(description=msg.content, color=author_color)
             e.set_author(name=msg.author.display_name,
                          icon_url=msg.author.avatar_url_as(size=64))
 
@@ -54,18 +64,29 @@ class QuoteCog:
             if msg.attachments and hasattr(msg.attachments[0], 'height'):
                 e.set_image(url=msg.attachments[0].url)
 
+            num_quoted += 1
             self.bot.dbh.update_quote_count(ctx.guild.id)
 
             await quote_channel.send(embed=e)
 
-        # TODO: Print correct number (i.e. decrement by failed number of msgs)
-        await ctx.send(f"Quoted {len(msg_ids)} messages.")
+        if num_quoted == 1:
+            plural = "message"
+        else:
+            plural = "messages"
+
+        await ctx.send(f"Quoted {len(msg_ids)} {plural}.")
 
     @quote.error
     async def quote_error_handler(self, ctx, error):
         if isinstance(error, commands.BadArgument):
-            print(error)
             await ctx.send("That channel doesn't exist!")
+        else:
+            raise error
+
+    @quote.command(name='from')
+    async def quote_from(self, ctx, channel: discord.TextChannel, *msg_ids):
+        ctx.other_channel = channel
+        await ctx.invoke(self.quote, *msg_ids)
 
 
 def setup(bot):

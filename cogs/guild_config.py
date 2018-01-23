@@ -13,7 +13,6 @@ class ConfigCog:
         await ctx.send(f"Use `{ctx.command.qualified_name} get` or " +
                        f"`{ctx.command.qualified_name} set <channel mention>`")
 
-    # TODO: Error handler for incorrect channel
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @quote_channel.command(name='set')
@@ -24,7 +23,8 @@ class ConfigCog:
             channel (discord.TextChannel): Channel mention, i.e. #general.
         """
         if self.bot.dbh.set_quote_channel(ctx.guild.id, channel.id):
-            await ctx.send(f"Quote channel for {ctx.guild.name} is now {channel.mention}.")
+            await ctx.send(f"Quote channel for {ctx.guild.name} " +
+                           f"is now {channel.mention}.")
         else:
             await ctx.send("Unable to update channel.")
 
@@ -45,7 +45,7 @@ class ConfigCog:
             return
 
         if qc:
-            await ctx.send(f"The quote channel for {ctx.guild.name} is +"
+            await ctx.send(f"The quote channel for {ctx.guild.name} is " +
                            f"{qc.mention}.")
         else:
             await ctx.send("It looks like the quote channel was deleted. " +

@@ -24,14 +24,15 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 
 ### To-Do
 
+- [ ] Write help/usage documentation
 - [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
 - [x] Make command `qc set` admin-only.
 - [ ] Update the `stats` command to display global stats as well.
 - [x] Update `quote` command to take an arbitrary number of message IDs.
-- [ ] **New:** Fix `quote` command so users can specify a channel.
+- [x] Add `quote` subcommand so users can specify a channel.
 - [ ] Update `quote` command to handle non-image attachments.
 - [ ] Update `quote` command to handle up to 10 attachments.
 - [ ] Implement `unquote` command.
-- [ ] Implement a `create_quote_channel` (admin only) command.
+- [ ] ~~Implement a `create_quote_channel` (admin only) command.~~
 - [ ] Add SQL server functionality.
 - [ ] More testing and bugfixes.
