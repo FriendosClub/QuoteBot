@@ -6,13 +6,13 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 
 ### Usage
 
-**Note:** `m` denotes a mention of the bot, i.e. `@QuoteBot#6976`
+**Note:** `m` denotes a mention of the bot, i.e. `@QuoteBot#6976`.
 
-- `m quote <message ID>`: Quotes a message from the current channel.
-- `m quote <message ID> [channel mention]` [**currently broken**]: Quotes a message from the mentioned channel.
-- `m stats`: Displays QuoteBot's statistics.
+- `m quote <message ID> [message ID ...]`: Quotes one or more messages from the current channel.
+- `m quote from <channel mention> <message ID> [message ID ...]`: Quotes one or more messages from the mentioned channel.
 - `m qc set <channel mention>` [**admin only**]: Sets the channel quotes are embedded in.
 - `m qc get`: Prints a mention of the current quote channel to chat.
+- `m stats`: Displays QuoteBot's statistics.
 - `m ping`: Pong! Easy check to make sure QuoteBot is working.
 
 ### Setup
@@ -27,7 +27,7 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] Make command `qc set` admin-only.
 - [x] Update `quote` command to take an arbitrary number of message IDs.
 - [x] Add `quote` subcommand so users can specify a channel.
-- [ ] Update the `stats` command to display global stats as an embed.
+- [x] Update the `stats` command to display global stats as an embed.
 - [ ] Update `quote` command to handle non-image attachments.
 - [ ] Update `quote` command to handle up to 10 attachments.
 - [ ] Update `quote` command to handle embeds (e.g. YouTube videos).

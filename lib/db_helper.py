@@ -117,6 +117,17 @@ class DBHelper():
         conn.close()
 
         if guild_quote_count is None:
-            guild_quote_count = 0
+            guild_quote_count = (0, )
 
         return guild_quote_count[0]
+
+    def get_quote_count_global(self) -> int:
+        conn = sqlite3.connect(self.file)
+        cursor = conn.cursor()
+
+        cursor.execute('SELECT SUM(quote_count) FROM guilds')
+        total_qc = cursor.fetchone()
+
+        conn.close()
+
+        return total_qc[0]

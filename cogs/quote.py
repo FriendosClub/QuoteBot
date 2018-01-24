@@ -24,7 +24,7 @@ class QuoteCog:
 
         if quote_channel is None:
             await ctx.send("You haven't specified a quote channel! " +
-                           "You can set one with `set_quote_channel #channel`.")
+                           "You can set one with `qc set #channel`.")
             return
 
         if hasattr(ctx, 'other_channel'):
@@ -57,7 +57,7 @@ class QuoteCog:
 
             e = discord.Embed(description=msg.content, color=author_color)
             e.set_author(name=msg.author.display_name,
-                         icon_url=msg.author.avatar_url_as(size=64))
+                         icon_url=msg.author.avatar_url_as(size=128))
 
             # TODO: Handle up to 10 possible attachments
             # TODO: Handle attachments that aren't images

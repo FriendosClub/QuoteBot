@@ -29,11 +29,12 @@ async def on_ready():
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
-    extensions = ['cogs.ping',
-                  'cogs.stats',
-                  'cogs.guild_config',
-                  'cogs.quote']
-    for extension in extensions:
+    bot.ext_names = ['cogs.ping',
+                     'cogs.stats',
+                     'cogs.guild_config',
+                     'cogs.quote',
+                     'cogs.reload_extension']
+    for extension in bot.ext_names:
         try:
             bot.load_extension(extension)
         except Exception as e:
