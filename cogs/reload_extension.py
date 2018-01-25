@@ -9,6 +9,7 @@ class ReloadCog:
     @commands.is_owner()
     @commands.group(invoke_without_command=True, name='reload')
     async def full_reload(self, ctx):
+        print("Bot reloading...")
         load_count = 0
 
         for extension in self.bot.ext_names:
@@ -32,6 +33,7 @@ class ReloadCog:
     @commands.is_owner()
     @full_reload.command(name='ext')
     async def reload_ext(self, ctx, ext_name: str):
+        print(f"Bot reloading ext cogs.{ext_name}")
         try:
             self.bot.unload_extension(f'cogs.{ext_name}')
         except Exception as e:

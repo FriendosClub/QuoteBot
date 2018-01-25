@@ -28,10 +28,10 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] Update `quote` command to take an arbitrary number of message IDs.
 - [x] Add `quote` subcommand so users can specify a channel.
 - [x] Update the `stats` command to display global stats as an embed.
-- [ ] Update `quote` command to handle non-image attachments.
-- [ ] Update `quote` command to handle up to 10 attachments.
-- [ ] Update `quote` command to handle embeds (e.g. YouTube videos).
-- [ ] Implement `unquote` command.
+- [x] Update `quote` command to handle non-image attachments.
+- [x] Update `quote` command to handle up to 10 attachments.
+- [ ] ~~Update `quote` command to handle embeds (e.g. YouTube videos).~~
+- [x] Implement `unquote` command.
 - [ ] Create a more verbose `on_ready` message.
 - [ ] Add logging for invites, database manipulation, errors.
 - [ ] Update command help/usage and documentation.

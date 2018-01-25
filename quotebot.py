@@ -33,6 +33,7 @@ if __name__ == '__main__':
                      'cogs.stats',
                      'cogs.guild_config',
                      'cogs.quote',
+                     'cogs.unquote',
                      'cogs.reload_extension']
     for extension in bot.ext_names:
         try:

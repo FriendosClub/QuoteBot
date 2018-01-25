@@ -12,8 +12,10 @@ class QuoteCog:
         """Quote a message.
 
         Args:
-            msg_id (int): The ID of the message (... > Copy ID)
-            channel (discord.TextChannel, optional): Which channel to search.
+            *msg_ids: Numreic IDs for messages to quote
+
+        Returns:
+            TYPE: Description
         """
         if not msg_ids:
             await ctx.send("Please specify at least one message ID.")
@@ -27,11 +29,13 @@ class QuoteCog:
                            "You can set one with `qc set #channel`.")
             return
 
+        # ctx.other_channel is specified in the `quote_from` function.
         if hasattr(ctx, 'other_channel'):
             channel = ctx.other_channel
         else:
             channel = ctx.message.channel
 
+        # Counter for successful quotes
         num_quoted = 0
 
         for msg_id in msg_ids:
@@ -49,7 +53,7 @@ class QuoteCog:
                                "trying to retrieve message.")
                 continue
 
-            # Users who left the server have no attribute "color"
+            # Users who left the server have no attribute 'color'
             if hasattr(msg.author, 'color'):
                 author_color = msg.author.color
             else:
@@ -59,16 +63,34 @@ class QuoteCog:
             e.set_author(name=msg.author.display_name,
                          icon_url=msg.author.avatar_url_as(size=128))
 
-            # TODO: Handle up to 10 possible attachments
-            # TODO: Handle attachments that aren't images
-            if msg.attachments and hasattr(msg.attachments[0], 'height'):
-                e.set_image(url=msg.attachments[0].url)
+            atch_urls = ""
+            if msg.attachments:
+                # Debugging
+                print(f"Found {len(msg.attachments)} attachments.")
+                if (
+                    # If there's only one attachment and it's an image,
+                    # attach it to the embed.
+                    msg.attachments[0].height and len(msg.attachments) == 1
+                ):
+                    e.set_image(url=msg.attachments[0].url)
+                else:
+                    for attachment in msg.attachments:
+                        atch_urls += f"{attachment.url}\n"
 
-            num_quoted += 1
-            self.bot.dbh.update_quote_count(ctx.guild.id)
+            if atch_urls:
+                e.add_field(name="Attached Files", value=atch_urls,
+                            inline=False)
 
-            await quote_channel.send(embed=e)
+            try:
+                await quote_channel.send(embed=e)
+            except Exception as e:
+                await ctx.send(f"Error posting to {quote_channel.mention}.")
+                raise e
+            else:
+                num_quoted += 1
+                self.bot.dbh.update_quote_count(ctx.guild.id)
 
+        # Could use a pluralization library but one instance is not an issue.
         if num_quoted == 1:
             plural = "message"
         else:
@@ -85,6 +107,12 @@ class QuoteCog:
 
     @quote.command(name='from')
     async def quote_from(self, ctx, channel: discord.TextChannel, *msg_ids):
+        """Quote message(s) from a channel other than the current one.
+
+        Args:
+            channel (discord.TextChannel): Target channel.
+            *msg_ids: Numreic IDs for messages to quote.
+        """
         ctx.other_channel = channel
         await ctx.invoke(self.quote, *msg_ids)
 
