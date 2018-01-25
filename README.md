@@ -32,7 +32,8 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] Update `quote` command to handle up to 10 attachments.
 - [ ] ~~Update `quote` command to handle embeds (e.g. YouTube videos).~~
 - [x] Implement `unquote` command.
-- [ ] Create a more verbose `on_ready` message.
+- [x] Create a more verbose `on_ready` message.
+- [ ] If quoting a message with just a URL to an image, embed the image.
 - [ ] Add logging for invites, database manipulation, errors.
 - [ ] Update command help/usage and documentation.
 - [ ] Implement DMing of help to users who request it.
@@ -49,3 +50,4 @@ _Most of these features are theoretical and may or may not be implemented._
 - [ ] Add SQL server functionality.
 - [ ] Add more fields to the `guilds` table so stats can show "top" servers.
 - [ ] Implement relational table to keep track of specific quoted messages.
+- [ ] Save and attach files to quote message instead of URLs.

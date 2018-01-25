@@ -24,6 +24,14 @@ async def on_ready():
     """Actions executed when the bot is logged in and available.
     """
     print(f"Logged in as {bot.user.name}#{bot.user.discriminator}")
+    print(f"> Connected to {len(bot.guilds)} guilds")
+
+    total_members = 0
+    for guild in bot.guilds:
+        for member in guild.members:
+            total_members += 1
+
+    print(f"> Servicing {total_members} members")
 
 
 if __name__ == '__main__':
