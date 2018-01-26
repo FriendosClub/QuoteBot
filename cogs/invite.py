@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class InviteCog:
+class Invite:
     def __init__(self, bot):
         self.bot = bot
         self.perms = 117760
@@ -17,4 +17,4 @@ class InviteCog:
 
 
 def setup(bot):
-    bot.add_cog(InviteCog(bot))
+    bot.add_cog(Invite(bot))

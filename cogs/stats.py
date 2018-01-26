@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class StatsCog:
+class Stats:
     def __init__(self, bot):
         self.bot = bot
 
@@ -30,4 +30,4 @@ class StatsCog:
 
 
 def setup(bot):
-    bot.add_cog(StatsCog(bot))
+    bot.add_cog(Stats(bot))

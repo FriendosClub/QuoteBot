@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class UnQuoteCog:
+class Unquote:
     def __init__(self, bot):
         self.bot = bot
 
@@ -55,4 +55,4 @@ class UnQuoteCog:
 
 
 def setup(bot):
-    bot.add_cog(UnQuoteCog(bot))
+    bot.add_cog(Unquote(bot))

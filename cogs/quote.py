@@ -1,10 +1,32 @@
 import discord
+from datetime import datetime
+from dateutil import tz
 from discord.ext import commands
 
 
-class QuoteCog:
+class Quote:
     def __init__(self, bot):
         self.bot = bot
+
+    def utc_to_est(self, msg_timestamp):
+        """Converts UTC timestamp to locale’s date and time representation.
+        From https://stackoverflow.com/a/4771733/3722806
+
+        Args:
+            msg_timestamp (TYPE): UTC timestamp.
+
+        Returns:
+            str: String representing locale's date and time representation.
+        """
+        # Automatically determine time zones.
+        from_zone = tz.tzutc()
+        to_zone = tz.tzlocal()
+
+        # Convert UTC message timestamp to local time.
+        utc = msg_timestamp.replace(tzinfo=from_zone)
+
+        # Return timezone string in local time.
+        return utc.astimezone(to_zone).strftime('%a %b. %-d %Y, %-I:%M %p')
 
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
@@ -102,6 +124,10 @@ class QuoteCog:
                 e.add_field(name="Attached Files", value=atch_urls,
                             inline=False)
 
+            # Fill out footer info: Date and text channel
+            e.set_footer(text=f"#{channel.name} | " +
+                         f"{self.utc_to_est(msg.created_at)}")
+
             try:
                 quote_msg = await quote_channel.send(embed=e)
             except discord.Forbidden:
@@ -159,4 +185,4 @@ class QuoteCog:
 
 
 def setup(bot):
-    bot.add_cog(QuoteCog(bot))
+    bot.add_cog(Quote(bot))

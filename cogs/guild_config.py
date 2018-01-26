@@ -12,7 +12,7 @@ def owner_or_admin(ctx):
     return commands.check(predicate)
 
 
-class ConfigCog:
+class Config:
     def __init__(self, bot):
         self.bot = bot
 
@@ -20,11 +20,12 @@ class ConfigCog:
     @commands.group(invoke_without_command=True,
                     aliases=['quotechannel', 'qc'])
     async def quote_channel(self, ctx):
+        """Base for 'qc set' and 'qc get'. See 'help quote_channel'.
+        """
         await ctx.send(f"Use `{ctx.command.qualified_name} get` or " +
                        f"`{ctx.command.qualified_name} set <channel mention>`")
 
     @commands.guild_only()
-    # @commands.has_permissions(administrator=True)
     @commands.check(owner_or_admin)
     @quote_channel.command(name='set')
     async def qc_set(self, ctx, channel: discord.TextChannel):
@@ -67,4 +68,4 @@ class ConfigCog:
 
 
 def setup(bot):
-    bot.add_cog(ConfigCog(bot))
+    bot.add_cog(Config(bot))

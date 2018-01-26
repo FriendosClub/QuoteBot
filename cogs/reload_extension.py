@@ -2,13 +2,15 @@ import discord
 from discord.ext import commands
 
 
-class ReloadCog:
+class Reload:
     def __init__(self, bot):
         self.bot = bot
 
     @commands.is_owner()
     @commands.group(invoke_without_command=True, name='reload')
     async def full_reload(self, ctx):
+        """[Owner only] Reloads every cog the bot has loaded.
+        """
         print("Bot reloading...")
         load_count = 0
 
@@ -31,23 +33,28 @@ class ReloadCog:
         await ctx.send(f"Reloaded {load_count} extensions.")
 
     @commands.is_owner()
-    @full_reload.command(name='ext')
-    async def reload_ext(self, ctx, ext_name: str):
-        print(f"Bot reloading ext cogs.{ext_name}")
+    @full_reload.command(name='cog')
+    async def reload_ext(self, ctx, cog_name: str):
+        """[Owner only] Reloads a specific cog.
+
+        Args:
+            cog_name (str): Cog name without 'cogs.', i.e. 'quote'.
+        """
+        print(f"Bot reloading ext cogs.{cog_name}")
         try:
-            self.bot.unload_extension(f'cogs.{ext_name}')
+            self.bot.unload_extension(f'cogs.{cog_name}')
         except Exception as e:
-            await ctx.send(f"Failed to unload cogs.{ext_name}.")
+            await ctx.send(f"Failed to unload cogs.{cog_name}.")
             raise e
 
         try:
-            self.bot.load_extension(f'cogs.{ext_name}')
+            self.bot.load_extension(f'cogs.{cog_name}')
         except Exception as e:
-            await ctx.send(f"Failed to load cog cogs.{ext_name}")
+            await ctx.send(f"Failed to load cog cogs.{cog_name}")
             raise e
         else:
-            await ctx.send(f"Reloaded cogs.{ext_name}.")
+            await ctx.send(f"Reloaded cogs.{cog_name}.")
 
 
 def setup(bot):
-    bot.add_cog(ReloadCog(bot))
+    bot.add_cog(Reload(bot))
