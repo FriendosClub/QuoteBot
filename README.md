@@ -30,7 +30,7 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] Update the `stats` command to display global stats as an embed.
 - [x] Update `quote` command to handle non-image attachments.
 - [x] Update `quote` command to handle up to 10 attachments.
-- [ ] ~~Update `quote` command to handle embeds (e.g. YouTube videos).~~
+- [ ] Update `quote` command to add reactions from original messages.
 - [x] Implement `unquote` command.
 - [x] Create a more verbose `on_ready` message.
 - [ ] If quoting a message with just a URL to an image, embed the image.
@@ -38,6 +38,7 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [ ] Update command help/usage and documentation.
 - [ ] Implement DMing of help to users who request it.
 - [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
+- [ ] ~~Update `quote` command to handle embeds (e.g. YouTube videos).~~
 
 ### v2.0 Roadmap
 
