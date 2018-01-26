@@ -24,22 +24,14 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 
 ### v1.0 Roadmap
 
-- [x] Make command `qc set` admin-only.
-- [x] Update `quote` command to take an arbitrary number of message IDs.
-- [x] Add `quote` subcommand so users can specify a channel.
-- [x] Update the `stats` command to display global stats as an embed.
-- [x] Update `quote` command to handle non-image attachments.
-- [x] Update `quote` command to handle up to 10 attachments.
+- [x] Make `quote` command available to bot owner and admins.
 - [ ] Update `quote` command to add reactions from original messages.
-- [x] Implement `unquote` command.
-- [x] Create a more verbose `on_ready` message.
 - [ ] If quoting a message with just a URL to an image, embed the image.
 - [ ] Give quoted message embeds a footer with date, time, and author.
 - [ ] Add logging for invites, database manipulation, errors.
 - [ ] Update command help/usage and documentation.
 - [ ] Implement DMing of help to users who request it.
 - [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
-- [ ] ~~Update `quote` command to handle embeds (e.g. YouTube videos).~~
 
 ### v2.0 Roadmap
 

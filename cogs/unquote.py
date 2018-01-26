@@ -9,6 +9,11 @@ class UnQuoteCog:
     @commands.guild_only()
     @commands.command()
     async def unquote(self, ctx, *msg_ids):
+        """Remove the specified message from the quote channel.
+
+        Args:
+            *msg_ids: ID(s) of the quotes to remove.
+        """
         if not msg_ids:
             await ctx.send("Please specify at least one message ID.")
             return

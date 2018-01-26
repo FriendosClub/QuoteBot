@@ -2,6 +2,16 @@ import discord
 from discord.ext import commands
 
 
+def owner_or_admin(ctx):
+    """Check to see if the user invoking the command is owner OR admin.
+    Thanks to noodle#0001 on the discord.py server for this one.
+    """
+    async def predicate(ctx):
+        return any([ctx.channel.permissions_for(ctx.author).manage_guild,
+                    (str(ctx.author.id) in trustedusers)])
+    return commands.check(predicate)
+
+
 class ConfigCog:
     def __init__(self, bot):
         self.bot = bot
@@ -14,7 +24,8 @@ class ConfigCog:
                        f"`{ctx.command.qualified_name} set <channel mention>`")
 
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
+    # @commands.has_permissions(administrator=True)
+    @commands.check(owner_or_admin)
     @quote_channel.command(name='set')
     async def qc_set(self, ctx, channel: discord.TextChannel):
         """Set the text channel all quoted messages for a guild are embedded in.
@@ -32,6 +43,8 @@ class ConfigCog:
     async def qc_set_error_handler(self, ctx, error):
         if isinstance(error, commands.BadArgument):
             await ctx.send("That channel doesn't exist.")
+        else:
+            raise error
 
     @commands.guild_only()
     @quote_channel.command(name='get')
