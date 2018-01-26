@@ -25,8 +25,10 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 ### v1.0 Roadmap
 
 - [x] Make `quote` command available to bot owner and admins.
-- [ ] Update `quote` command to add reactions from original messages.
-- [ ] If quoting a message with just a URL to an image, embed the image.
+- [x] Update `quote` command to add reactions from original messages.
+- [ ] Add `invite` command.
+- [ ] Write help documentation for `help` command.
+- [x] If quoting a message with just a URL to an image, embed the image.
 - [ ] Give quoted message embeds a footer with date, time, and author.
 - [ ] Add logging for invites, database manipulation, errors.
 - [ ] Update command help/usage and documentation.
