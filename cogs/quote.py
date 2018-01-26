@@ -43,6 +43,17 @@ class QuoteCog:
         num_quoted = 0
 
         for msg_id in msg_ids:
+            # If we're quoting a lot of messages, it'll take a while before
+            # confirmation is posted. Trigger typing in the meantime.
+            await ctx.channel.trigger_typing()
+            # We'll get a 403 error that kills everything else if this
+            # runs into any issues, so just pass over any exceptions and let
+            # the rest of our error handling take care of the problem.
+            try:
+                await quote_channel.trigger_typing()
+            except Exception as e:
+                pass
+
             # If we run into an error processing one message,
             # skip to the next one.
             try:
@@ -51,10 +62,10 @@ class QuoteCog:
                 await ctx.send(f"No message exists with ID {msg_id}.")
                 continue
             except discord.Forbidden:
-                # TODO: This could spam error messages in the case of
-                # quote_from commands. Maybe replace `continue` with `return`.
+                # Break out of the quote loop if we can't access the quote
+                # channel.
                 await ctx.send(f"I can't access {channel.mention}.")
-                continue
+                return
             except discord.HTTPException as he:
                 await ctx.send(f"Got error code {he.status} " +
                                "trying to retrieve message.")
@@ -96,8 +107,8 @@ class QuoteCog:
             except discord.Forbidden:
                 # To avoid spamming error messages, quit out of the loop if
                 # the bot can't access the quote channel.
-                await ctx.send(f"Can't post messages to " +
-                               "{quote_channel.mention.}. Aborting.")
+                await ctx.send("Can't post messages to " +
+                               f"{quote_channel.mention}. Aborting.")
                 return
             except Exception as e:
                 await ctx.send(f"Error posting to {quote_channel.mention}.")

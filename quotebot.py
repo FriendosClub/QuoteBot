@@ -44,6 +44,7 @@ if __name__ == '__main__':
         'cogs.quote',
         'cogs.unquote',
         'cogs.reload_extension',
+        'cogs.invite',
     ]
     for extension in bot.ext_names:
         try:
