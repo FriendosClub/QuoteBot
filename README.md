@@ -34,6 +34,7 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] Implement `unquote` command.
 - [x] Create a more verbose `on_ready` message.
 - [ ] If quoting a message with just a URL to an image, embed the image.
+- [ ] Give quoted message embeds a footer with date, time, and author.
 - [ ] Add logging for invites, database manipulation, errors.
 - [ ] Update command help/usage and documentation.
 - [ ] Implement DMing of help to users who request it.
