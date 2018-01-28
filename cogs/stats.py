@@ -22,7 +22,7 @@ class Stats:
         e.add_field(name='Total messages quoted:',
                     value=self.bot.dbh.get_quote_count_global(),
                     inline=False)
-        e.add_field(name='Number of servres joined:',
+        e.add_field(name='Number of servers joined:',
                     value=len(self.bot.guilds),
                     inline=False)
 
