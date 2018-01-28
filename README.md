@@ -42,6 +42,8 @@ Now you can copy message IDs. When you hover your mouse over a message, click th
 
 ### v1.0 Roadmap
 
+**Released!**
+
 - [x] Make `quote` command available to bot owner and admins.
 - [x] Update `quote` command to add reactions from original messages.
 - [x] Add `invite` command.
