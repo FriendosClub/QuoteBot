@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import discord
 import json
 from lib.db_helper import DBHelper
