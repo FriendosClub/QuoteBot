@@ -11,6 +11,7 @@ class Invite:
     async def invite(self, ctx):
         """Print a URL to invite QuoteBot to your server.
         """
+        print(f"{ctx.author.id} requested an invite URL.")
         await ctx.send("https://discordapp.com/oauth2/authorize" +
                        f"?client_id={self.bot.user.id}&scope=bot" +
                        f"&permissions={self.perms}")

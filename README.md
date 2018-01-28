@@ -30,7 +30,7 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] Write help documentation for `help` command.
 - [x] If quoting a message with just a URL to an image, embed the image.
 - [x] Give quoted message embeds a footer with date, time, and channel.
-- [ ] Add logging for invites, database manipulation, errors.
+- [ ] Add `print` statements for invites, database manipulation, errors.
 - [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
 
 ### v2.0 Roadmap

@@ -35,6 +35,8 @@ class Config:
             channel (discord.TextChannel): Channel mention, i.e. #general.
         """
         if self.bot.dbh.set_quote_channel(ctx.guild.id, channel.id):
+            print(f"{ctx.author.id} set quote channel for {ctx.guild.id} to " +
+                  f"{channel.id}")
             await ctx.send(f"Quote channel for {ctx.guild.name} " +
                            f"is now {channel.mention}.")
         else:

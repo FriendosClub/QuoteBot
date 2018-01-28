@@ -91,6 +91,7 @@ class Quote:
             except discord.HTTPException as he:
                 await ctx.send(f"Got error code {he.status} " +
                                "trying to retrieve message.")
+                raise he
                 continue
 
             # Users who left the server have no attribute 'color'
@@ -170,6 +171,7 @@ class Quote:
         if isinstance(error, commands.BadArgument):
             await ctx.send("That channel doesn't exist!")
         else:
+            print("Encountered error in quote comand:")
             raise error
 
     @quote.command(name='from')

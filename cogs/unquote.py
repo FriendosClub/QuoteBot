@@ -40,6 +40,7 @@ class Unquote:
                 # TODO: Maybe add conditionals for different error codes
                 await ctx.send(f"Got error code {he.status} " +
                                "trying to retrieve message.")
+                raise he
                 continue
 
             try:
