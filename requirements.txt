@@ -1,7 +1,9 @@
 aiohttp==2.2.5
 async-timeout==2.0.0
 chardet==3.0.4
-discord.py==1.0.0a1428+g4fef6fc
+# discord.py==1.0.0a1428+g4fef6fc
+# Manually install discord.py v1.0.0a using
+# python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py
 idna==2.6
 multidict==4.0.0
 python-dateutil==2.6.1
