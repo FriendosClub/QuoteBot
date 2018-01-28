@@ -33,8 +33,9 @@ Now you can copy message IDs. When you hover your mouse over a message, click th
 
 1. Clone the repo with `git clone <url> [folder]`.
 2. Install requirements with `pip[3] install -r requirements.txt`.
-3. Copy `config_default.json` to `config.json` and enter your bot token.
-4. Run the bot with `python[3] quotebot.py`.
+3. Install discord.py v1.0.0a with `python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py`
+4. Copy `config_default.json` to `config.json` and enter your bot token.
+5. Run the bot with `python[3] quotebot.py`.
 
 ### v1.0 Roadmap
 
