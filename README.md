@@ -1,6 +1,6 @@
 # QuoteBot
 
-![Example 01](https://my.mixtape.moe/ihmkev.png)
+![Example 01](https://my.mixtape.moe/ihmkev.png)    
 ![Example 02](https://my.mixtape.moe/sexrnz.png)
 
 Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your favorite memories!
