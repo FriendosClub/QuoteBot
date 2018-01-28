@@ -1,5 +1,8 @@
 # QuoteBot
 
+![Example 01](https://my.mixtape.moe/ihmkev.png)
+![Example 02](https://my.mixtape.moe/sexrnz.png)
+
 Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your favorite memories!
 
 ### [Click here to add QuoteBot to your server!](https://discordapp.com/oauth2/authorize?client_id=403644354591326218&scope=bot&permissions=117760)
