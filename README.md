@@ -10,10 +10,24 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 
 - `m quote <message ID> [message ID ...]`: Quotes one or more messages from the current channel.
 - `m quote from <channel mention> <message ID> [message ID ...]`: Quotes one or more messages from the mentioned channel.
+- `m unquote <message ID> [message ID ..]`: Unquotes a message. (ID must be from the quote channel.)
 - `m qc set <channel mention>` [**admin only**]: Sets the channel quotes are embedded in.
 - `m qc get`: Prints a mention of the current quote channel to chat.
+- `m invite`: Prints a URL to invite the bot to your server.
 - `m stats`: Displays QuoteBot's statistics.
 - `m ping`: Pong! Easy check to make sure QuoteBot is working.
+- `m reload [cog name] [cog name ...]`: Reloads specified cogs or all cogs if none are specified.
+
+### Enabling Developer Mode in Discord
+
+You need to enable developer mode to be able to copy message IDs. Here's how:
+
+1. Click on "User Settings."
+2. Click on "Appearance."
+3. Scroll down to "Advanced."
+4. Click the switch next to "Developer Mode."
+
+Now you can copy message IDs. When you hover your mouse over a message, click the three dots to the right (long press on mobile). An option called "Copy ID" should show up. Click it!
 
 ### Setup
 
@@ -31,7 +45,7 @@ Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your fa
 - [x] If quoting a message with just a URL to an image, embed the image.
 - [x] Give quoted message embeds a footer with date, time, and channel.
 - [x] Add `print` statements for invites, database manipulation, errors.
-- [ ] Add instructions for enabling Discord Developer Mode to `README.md`.
+- [x] Add instructions for enabling Discord Developer Mode to `README.md`.
 
 ### v2.0 Roadmap
 

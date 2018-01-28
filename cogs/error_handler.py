@@ -13,8 +13,11 @@ class CommandErrorHandler:
 
     async def on_command_error(self, ctx, error):
         """The event triggered when an error is raised while invoking a command.
-        ctx   : Context
-        error : Exception"""
+
+        Args:
+            ctx: Context
+            error: Exception
+        """
 
         if hasattr(ctx.command, 'on_error'):
             return
@@ -45,16 +48,6 @@ class CommandErrorHandler:
               file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__,
                                   file=sys.stderr)
-
-    # @commands.command(name='repeat', aliases=['mimic', 'copy'])
-    # async def do_repeat(self, ctx, *, inp: str):
-    #     await ctx.send(inp)
-
-    # @do_repeat.error
-    # async def do_repeat_handler(self, ctx, error):
-    #     if isinstance(error, commands.MissingRequiredArgument):
-    #         if error.param == 'inp':
-    #             await ctx.send("You forgot to give me input to repeat!")
 
 
 def setup(bot):

@@ -55,6 +55,5 @@ if __name__ == '__main__':
         else:
             print(f"> Loaded {extension[5:]}")
 
-
-print("Starting quotebot...")
-bot.run(cfg['token'], reconnect=True)
+    print("Starting quotebot...")
+    bot.run(cfg['token'], reconnect=True)

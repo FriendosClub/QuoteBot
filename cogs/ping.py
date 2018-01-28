@@ -8,7 +8,8 @@ class Ping:
 
     @commands.command()
     async def ping(self, ctx):
-        """Simple command to ensure the bot is working."""
+        """Simple command to ensure the bot is working.
+        """
         await ctx.send("Pong!")
 
 

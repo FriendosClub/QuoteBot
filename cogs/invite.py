@@ -9,7 +9,7 @@ class Invite:
 
     @commands.command()
     async def invite(self, ctx):
-        """Print a URL to invite QuoteBot to your server.
+        """Print a URL to invite QuoteBot to a server.
         """
         print(f"{ctx.author.id} requested an invite URL.")
         await ctx.send("https://discordapp.com/oauth2/authorize" +

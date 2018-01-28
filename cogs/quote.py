@@ -31,13 +31,10 @@ class Quote:
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
     async def quote(self, ctx, *msg_ids):
-        """Quote a message.
+        """Quotes a message.
 
         Args:
             *msg_ids: Numreic IDs for messages to quote
-
-        Returns:
-            TYPE: Description
         """
         # Check to make sure we were given message IDs to quote
         if not msg_ids:
@@ -81,7 +78,7 @@ class Quote:
             try:
                 msg = await channel.get_message(msg_id)
             except discord.NotFound:
-                await ctx.send(f"No message exists with ID {msg_id}.")
+                await ctx.send(f"No message exists with ID `{msg_id}`.")
                 continue
             except discord.Forbidden:
                 # Break out of the quote loop if we can't access the quote
@@ -89,7 +86,7 @@ class Quote:
                 await ctx.send(f"I can't access {channel.mention}.")
                 return
             except discord.HTTPException as he:
-                await ctx.send(f"Got error code {he.status} " +
+                await ctx.send(f"Got error code `{he.status}` " +
                                "trying to retrieve message.")
                 raise he
                 continue
@@ -142,6 +139,8 @@ class Quote:
                 raise e
             else:
                 # Increment the statistics count both locally and in the DB.
+                # TODO: Figure out why this gets incremented despite having
+                #       continue statement theoretically skip this logic.
                 num_quoted += 1
                 self.bot.dbh.update_quote_count(ctx.guild.id)
 
@@ -166,7 +165,7 @@ class Quote:
         """Error handler for the quote command.
 
         Args:
-            error (TYPE): The error raised by the quote command.
+            error: The error raised by the quote command.
         """
         if isinstance(error, commands.BadArgument):
             await ctx.send("That channel doesn't exist!")

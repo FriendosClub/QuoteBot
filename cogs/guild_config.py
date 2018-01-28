@@ -52,6 +52,8 @@ class Config:
     @commands.guild_only()
     @quote_channel.command(name='get')
     async def qc_get(self, ctx):
+        """Gets the channel quoted messages are currently sent to.
+        """
         qc_id = self.bot.dbh.get_quote_channel(ctx.guild.id)
 
         if qc_id:
