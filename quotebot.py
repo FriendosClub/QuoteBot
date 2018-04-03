@@ -33,7 +33,7 @@ async def on_ready():
         for member in guild.members:
             total_members += 1
 
-    print(f"> Servicing {total_members} members")
+    print(f"> Serving {total_members} members")
 
 
 if __name__ == '__main__':

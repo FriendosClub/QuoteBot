@@ -34,7 +34,7 @@ class Quote:
         """Quotes a message.
 
         Args:
-            *msg_ids: Numreic IDs for messages to quote
+            *msg_ids: Numeric IDs for messages to quote
         """
         # Check to make sure we were given message IDs to quote
         if not msg_ids:
@@ -179,7 +179,7 @@ class Quote:
 
         Args:
             channel (discord.TextChannel): Target channel.
-            *msg_ids: Numreic IDs for messages to quote.
+            *msg_ids: Numeric IDs for messages to quote.
         """
         ctx.other_channel = channel
         await ctx.invoke(self.quote, *msg_ids)
