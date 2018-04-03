@@ -1,4 +1,5 @@
 import discord
+import re
 from datetime import datetime
 from dateutil import tz
 from discord.ext import commands
@@ -7,6 +8,23 @@ from discord.ext import commands
 class Quote:
     def __init__(self, bot):
         self.bot = bot
+        # TODO: Make sure this list of extensions is complete.
+        self.imgtypes = 'jpg|png|gif|gifv'
+        # Embedding videos isn't supported.
+        # self.vidtypes = 'mp4|webm'
+
+    def has_img_url(self, msg: str) -> str:
+        # TODO: GFYCat support via https://gfycat.com/cajax/get/<id> for URLs
+        #       like http://gfycat.com/beautifulunsightlyauklet
+        #       (Keep URL but embed "max5mbGif" from API)
+        pattern = re.compile(f'https?:\/\/.*?\.({self.imgtypes})',
+                             re.IGNORECASE)
+        match = pattern.match(msg)
+
+        if not match:
+            return None
+        else:
+            return match.group()
 
     def utc_to_est(self, msg_timestamp):
         """Converts UTC timestamp to locale’s date and time representation.
@@ -115,6 +133,13 @@ class Quote:
                 else:
                     for attachment in msg.attachments:
                         atch_urls += f"{attachment.url}\n"
+            # If there's no attachments, check for links we can embed
+            else:
+                pic = self.has_img_url(msg.content)
+
+                if pic and not e.image.url:
+                    e.set_image(url=pic)
+
 
             # atch_urls is just a string of all the attachment URLs. THey
             # will 404 if the original message is deleted.
