@@ -148,6 +148,7 @@ class Quote:
                             inline=False)
 
             # Fill out footer info: Date and text channel
+            # TODO: Add message ID?
             e.set_footer(text=f"#{channel.name} | " +
                          f"{self.utc_to_est(msg.created_at)}")
 
