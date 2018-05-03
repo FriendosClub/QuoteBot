@@ -1,5 +1,7 @@
 # QuoteBot
 
+[![Support on Patreon](https://i.imgur.com/M0lxm5R.png)](https://www.patreon.com/bePatron?u=6529371)
+
 ![Example 01](https://my.mixtape.moe/ihmkev.png)    
 ![Example 02](https://my.mixtape.moe/sexrnz.png)
 
