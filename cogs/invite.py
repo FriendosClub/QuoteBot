@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class Invite:
+class Invite(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.perms = 117760
