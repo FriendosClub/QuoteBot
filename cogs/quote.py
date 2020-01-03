@@ -94,7 +94,7 @@ class Quote(commands.Cog):
             # If we run into an error processing one message,
             # skip to the next one.
             try:
-                msg = await channel.get_message(msg_id)
+                msg = await channel.fetch_message(msg_id)
             except discord.NotFound:
                 await ctx.send(f"No message exists with ID `{msg_id}`.")
                 continue

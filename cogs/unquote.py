@@ -29,7 +29,7 @@ class Unquote(commands.Cog):
         deleted_count = 0
         for msg_id in msg_ids:
             try:
-                msg = await quote_channel.get_message(msg_id)
+                msg = await quote_channel.fetch_message(msg_id)
             except discord.NotFound:
                 await ctx.send("No message exists with that ID.")
                 continue
