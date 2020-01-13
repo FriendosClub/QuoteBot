@@ -1,2 +1,2 @@
 python-dateutil
--e git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py
+-e git+https://github.com/Rapptz/discord.py#egg=discord.py
