@@ -20,12 +20,22 @@ bot = commands.Bot(command_prefix=commands.when_mentioned,
 # Initialize our DB Helper object
 bot.dbh = DBHelper(cfg['db_file'])
 
+# # Set custom status
+# bot.customstatus = cfg['status']
+
 
 @bot.event
 async def on_ready():
     """Actions executed when the bot is logged in and available.
     """
     print(f"Logged in as {bot.user.name}#{bot.user.discriminator}")
+
+    # Apply custom status
+    # TODO: Change discord.Game to a custom status, once supported by discord.py
+    if cfg['status']:
+        await bot.change_presence(status=discord.Status.online, activity=discord.Game(name=cfg['status']))
+        print(f"Custom status set: " + cfg['status'])
+
     print(f"> Connected to {len(bot.guilds)} guilds")
 
     total_members = 0
