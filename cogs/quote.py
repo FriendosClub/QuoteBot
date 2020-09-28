@@ -194,6 +194,8 @@ class Quote(commands.Cog):
             plural = "message"
         else:
             plural = "messages"
+            
+        await ctx.message.delete()
 
     @quote.error
     async def quote_error_handler(self, ctx, error):
