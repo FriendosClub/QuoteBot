@@ -1,6 +1,5 @@
 import discord
 import re
-import asyncio
 from datetime import datetime
 from dateutil import tz
 from discord.ext import commands
@@ -38,8 +37,8 @@ class Quote(commands.Cog):
             str: String representing locale's date and time representation.
         """
         # Automatically determine time zones.
-        from_zone = tz.gettz('UTC')
-        to_zone = tz.gettz('America/New_York')
+        from_zone = tz.tzutc()
+        to_zone = tz.tzlocal()
 
         # Convert UTC message timestamp to local time.
         utc = msg_timestamp.replace(tzinfo=from_zone)
