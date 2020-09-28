@@ -1,5 +1,6 @@
 import discord
 import re
+import asyncio
 from datetime import datetime
 from dateutil import tz
 from discord.ext import commands
@@ -37,14 +38,14 @@ class Quote(commands.Cog):
             str: String representing locale's date and time representation.
         """
         # Automatically determine time zones.
-        from_zone = tz.tzutc()
-        to_zone = tz.tzlocal()
+        from_zone = tz.gettz('UTC')
+        to_zone = tz.gettz('America/New_York')
 
         # Convert UTC message timestamp to local time.
         utc = msg_timestamp.replace(tzinfo=from_zone)
 
         # Return timezone string in local time.
-        return utc.astimezone(to_zone).strftime('%a %b. %-d %Y, %-I:%M %p')
+        return utc.astimezone(to_zone).strftime('%b. %d, %Y, %I:%M %p')
 
     @commands.guild_only()
     @commands.group(invoke_without_command=True)
@@ -79,49 +80,55 @@ class Quote(commands.Cog):
         # Counter for successful quotes
         num_quoted = 0
 
-        for msg_id in msg_ids:
-            # If we're quoting a lot of messages, it'll take a while before
-            # confirmation is posted. Trigger typing in the meantime.
-            await ctx.channel.trigger_typing()
-            # We'll get a 403 error that kills everything else if this
-            # runs into any issues, so just pass over any exceptions and let
-            # the rest of our error handling take care of the problem.
-            try:
-                await quote_channel.trigger_typing()
-            except Exception as e:
-                pass
+        msg_id = msg_ids[0]
+        # If we're quoting a lot of messages, it'll take a while before
+        # confirmation is posted. Trigger typing in the meantime.
+        await ctx.channel.trigger_typing()
+        # We'll get a 403 error that kills everything else if this
+        # runs into any issues, so just pass over any exceptions and let
+        # the rest of our error handling take care of the problem.
+        try:
+            await quote_channel.trigger_typing()
+        except Exception as e:
+            pass
 
-            # If we run into an error processing one message,
-            # skip to the next one.
-            try:
+        # If we run into an error processing one message,
+        # skip to the next one.
+        try:
+            if msg_id.isnumeric():
                 msg = await channel.fetch_message(msg_id)
-            except discord.NotFound:
-                await ctx.send(f"No message exists with ID `{msg_id}`.")
-                continue
-            except discord.Forbidden:
-                # Break out of the quote loop if we can't access the quote
-                # channel.
-                await ctx.send(f"I can't access {channel.mention}.")
-                return
-            except discord.HTTPException as he:
-                await ctx.send(f"Got error code `{he.status}` " +
-                               "trying to retrieve message.")
-                raise he
-                continue
-
-            # Users who left the server have no attribute 'color'
-            if hasattr(msg.author, 'color'):
-                author_color = msg.author.color
+                message = msg.content
+                user = msg.author
             else:
-                author_color = discord.Colour(0xFFFFFF)
+                message = msg_id
+                user_id = int(msg_ids[1].replace('<@!', '').replace('>', ''))
+                user = self.bot.get_user(user_id)
+        except discord.NotFound:
+            await ctx.send(f"No message exists with ID `{msg_id}`.")
+        except discord.Forbidden:
+            # Break out of the quote loop if we can't access the quote
+            # channel.
+            await ctx.send(f"I can't access {channel.mention}.")
+            return
+        except discord.HTTPException as he:
+            await ctx.send(f"Got error code `{he.status}` " +
+                           "trying to retrieve message.")
+            raise he
 
-            # Create our embed object and start adding data to it.
-            e = discord.Embed(description=msg.content, color=author_color)
-            e.set_author(name=msg.author.display_name,
-                         icon_url=msg.author.avatar_url_as(size=128))
+        # Users who left the server have no attribute 'color'
+        if hasattr(user, 'color'):
+            author_color = user.color
+        else:
+            author_color = discord.Colour(0xFFFFFF)
 
-            # If the message has more than one attachment (possible via
-            # mobile app and bots), simply add the links to the attachments.
+        # Create our embed object and start adding data to it.
+        e = discord.Embed(description=message, color=author_color)
+        e.set_author(name=user.display_name,
+                     icon_url=user.avatar_url_as(size=128))
+
+        # If the message has more than one attachment (possible via
+        # mobile app and bots), simply add the links to the attachments.
+        if msg_id.isnumeric():
             atch_urls = ""
             if msg.attachments:
                 if (
@@ -135,41 +142,45 @@ class Quote(commands.Cog):
                         atch_urls += f"{attachment.url}\n"
             # If there's no attachments, check for links we can embed
             else:
-                pic = self.has_img_url(msg.content)
-
+                pic = self.has_img_url(message)
+    
                 if pic and not e.image.url:
                     e.set_image(url=pic)
-
-
+    
+    
             # atch_urls is just a string of all the attachment URLs. THey
             # will 404 if the original message is deleted.
             if atch_urls:
                 e.add_field(name="Attached Files", value=atch_urls,
                             inline=False)
-
+                            
             # Fill out footer info: Date and text channel
             # TODO: Add message ID?
-            e.set_footer(text=f"#{channel.name} | " +
-                         f"{self.utc_to_est(msg.created_at)}")
+            e.set_footer(text=f"{self.utc_to_est(msg.created_at)}")
+        else:
+            # Fill out footer info: Date and text channel
+            # TODO: Add message ID?
+            e.set_footer(text=f"{datetime.now().strftime('%b. %d, %Y, %I:%M %p')}")
 
-            try:
-                quote_msg = await quote_channel.send(embed=e)
-            except discord.Forbidden:
-                # To avoid spamming error messages, quit out of the loop if
-                # the bot can't access the quote channel.
-                await ctx.send("Can't post messages to " +
-                               f"{quote_channel.mention}. Aborting.")
-                return
-            except Exception as e:
-                await ctx.send(f"Error posting to {quote_channel.mention}.")
-                raise e
-            else:
-                # Increment the statistics count both locally and in the DB.
-                # TODO: Figure out why this gets incremented despite having
-                #       continue statement theoretically skip this logic.
-                num_quoted += 1
-                self.bot.dbh.update_quote_count(ctx.guild.id)
+        try:
+            quote_msg = await quote_channel.send(embed=e)
+        except discord.Forbidden:
+            # To avoid spamming error messages, quit out of the loop if
+            # the bot can't access the quote channel.
+            await ctx.send("Can't post messages to " +
+                           f"{quote_channel.mention}. Aborting.")
+            return
+        except Exception as e:
+            await ctx.send(f"Error posting to {quote_channel.mention}.")
+            raise e
+        else:
+            # Increment the statistics count both locally and in the DB.
+            # TODO: Figure out why this gets incremented despite having
+            #       continue statement theoretically skip this logic.
+            num_quoted += 1
+            self.bot.dbh.update_quote_count(ctx.guild.id)
 
+        if msg_id.isnumeric():
             # Try to add all the reactions the original message had.
             # This will fail for reactions from guilds the bot hasn't joined.
             for reaction in msg.reactions:
@@ -183,8 +194,6 @@ class Quote(commands.Cog):
             plural = "message"
         else:
             plural = "messages"
-
-        await ctx.send(f"Quoted {len(msg_ids)} {plural}.")
 
     @quote.error
     async def quote_error_handler(self, ctx, error):
