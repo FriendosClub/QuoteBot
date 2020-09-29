@@ -97,10 +97,10 @@ class Quote(commands.Cog):
             if msg_id.isnumeric():
                 msg = await channel.fetch_message(msg_id)
                 message = msg.content
-                user = msg.author
+                user = self.bot.get_user(msg.author.id)
             else:
                 message = msg_id
-                user_id = int(msg_ids[1].replace('<@!', '').replace('>', ''))
+                user_id = int("".join(filter(str.isdigit, msg_ids[1])))
                 user = self.bot.get_user(user_id)
         except discord.NotFound:
             await ctx.send(f"No message exists with ID `{msg_id}`.")
