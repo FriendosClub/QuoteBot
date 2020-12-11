@@ -6,6 +6,10 @@ quotebot.db
 *.sublime-project
 *.sublime-workspace
 
+## VS Code files
+.vscode
+quotebot.code-workspace
+
 ## OSX Files
 # General
 .DS_Store
