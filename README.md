@@ -1,69 +1,54 @@
 # QuoteBot
 
-[![Support on Patreon](https://i.imgur.com/M0lxm5R.png)](https://www.patreon.com/bePatron?u=6529371)
+<!-- TODO: Add Travis, Verified Bot badges -->
 
-![Example 01](https://my.mixtape.moe/ihmkev.png)    
-![Example 02](https://my.mixtape.moe/sexrnz.png)
+Tired of hitting the 50 message limit for pins? Use QuoteBot to save as many
+of your favorite messages as you want!
 
-Tired of hitting the 50 message limit for pins? Use QuoteBot to save all your favorite memories!
 
-### [Click here to add QuoteBot to your server!](https://discordapp.com/oauth2/authorize?client_id=403644354591326218&scope=bot&permissions=117760)
+## [Click here to invite QuoteBot to your server!][1]
 
-### Usage
 
-**Note:** `m` denotes a mention of the bot, i.e. `@QuoteBot#6976`.
+## What is QuoteBot?
 
-- `m quote <message ID> [message ID ...]`: Quotes one or more messages from the current channel.
-- `m quote from <channel mention> <message ID> [message ID ...]`: Quotes one or more messages from the mentioned channel.
-- `m unquote <message ID> [message ID ..]`: Unquotes a message. (ID must be from the quote channel.)
-- `m qc set <channel mention>` [**admin only**]: Sets the channel quotes are embedded in.
-- `m qc get`: Prints a mention of the current quote channel to chat.
-- `m invite`: Prints a URL to invite the bot to your server.
-- `m stats`: Displays QuoteBot's statistics.
-- `m ping`: Pong! Easy check to make sure QuoteBot is working.
-- `m reload [cog name] [cog name ...]`: Reloads specified cogs or all cogs if none are specified.
+Ever tried to pin a message in a channel and get an error that you're at the
+pinned message limit? This is the problem QuoteBot solves. Instead of pinning
+messages, QuoteBot embeds your favorite messages into a dedicated text channel
+specified by a server admin.
 
-### Enabling Developer Mode in Discord
+Check it out:
 
-You need to enable developer mode to be able to copy message IDs. Here's how:
+<!-- TODO: Add pictures of functionality -->
 
-1. Click on "User Settings."
-2. Click on "Appearance."
-3. Scroll down to "Advanced."
-4. Click the switch next to "Developer Mode."
 
-Now you can copy message IDs. When you hover your mouse over a message, click the three dots to the right (long press on mobile). An option called "Copy ID" should show up. Click it!
+## Using QuoteBot
 
-### Setup
+<!-- TODO: Make the site lol -->
+See [Using QuoteBot](#) for setup and usage examples.
 
-1. Clone the repo with `git clone <url> [folder]`.
-2. Install requirements with `pip[3] install -r requirements.txt`.
-3. Install discord.py v1.0.0a with `python3 -m pip install -U git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py`
-4. Copy `config_default.json` to `config.json` and enter your bot token.
-5. Run the bot with `python[3] quotebot.py`.
 
-### v1.0 Roadmap
+## v2 Roadmap
 
-**Released!**
+This section is subject to change.
 
-- [x] Make `quote` command available to bot owner and admins.
-- [x] Update `quote` command to add reactions from original messages.
-- [x] Add `invite` command.
-- [x] Write help documentation for `help` command.
-- [x] If quoting a message with just a URL to an image, embed the image.
-- [x] Give quoted message embeds a footer with date, time, and channel.
-- [x] Add `print` statements for invites, database manipulation, errors.
-- [x] Add instructions for enabling Discord Developer Mode to `README.md`.
+   - [x] Change licencing from `MIT` to `AGPL`
+   - [ ] Replace configuration via `config.json` with environment variables
+   - [ ] Replace current SQLite backend with Pony ORM and MySQL/MariaDB
+   - [ ] Fix outstanding [issues][2]
+   - [ ] Update commands to use new Discord functionality (i.e. links to messages)
+   - [ ] Refactor old, poorly written code.
+   - [ ] Implement CI with Travis
+   - [ ] Move bot documentation to GitHub Pages
+   - [ ] (stretch) Add cross-posting of quotes to QuoteBot's Discord (opt-in)
+   - [ ] (stretch) Add more per-user and per-server statistics
+     - i.e. Number of times a user has quoted/been quoted, etc.
 
-### v2.0 Roadmap
 
-**R&D of these features will begin if/when the bot has joined 500 guilds.**
+### Developing QuoteBot
 
-_Most of these features are theoretical and may or may not be implemented._
+<!-- TODO: Make this one too -->
+See [Working on QuoteBot](#) for information about the development process.
 
-- [ ] Refactor from `commands.Bot` to `commands.AutoShardedBot`.
-- [ ] Implement cross-guild quoting.
-- [ ] Add SQL server functionality.
-- [ ] Add more fields to the `guilds` table so stats can show "top" servers.
-- [ ] Implement relational table to keep track of specific quoted messages.
-- [ ] Save and attach files to quote message instead of URLs.
+
+[1]: https://discordapp.com/oauth2/authorize?client_id=403644354591326218&scope=bot&permissions=117760
+[2]: https://github.com/FriendosClub/QuoteBot/issues
