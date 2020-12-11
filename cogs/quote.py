@@ -1,3 +1,19 @@
+# QuoteBot - A Discord bot for archiving your favorite messages.
+# Copyright (C) 2020  Ralph Drake
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import discord
 import re
 from datetime import datetime
@@ -142,17 +158,17 @@ class Quote(commands.Cog):
             # If there's no attachments, check for links we can embed
             else:
                 pic = self.has_img_url(message)
-    
+
                 if pic and not e.image.url:
                     e.set_image(url=pic)
-    
-    
+
+
             # atch_urls is just a string of all the attachment URLs. THey
             # will 404 if the original message is deleted.
             if atch_urls:
                 e.add_field(name="Attached Files", value=atch_urls,
                             inline=False)
-                            
+
             # Fill out footer info: Date and text channel
             # TODO: Add message ID?
             e.set_footer(text=f"{self.utc_to_est(msg.created_at)}")
@@ -193,7 +209,7 @@ class Quote(commands.Cog):
             plural = "message"
         else:
             plural = "messages"
-            
+
         await ctx.message.delete()
 
     @quote.error
