@@ -2,7 +2,7 @@
 
 import discord
 import json
-from lib.db_helper import DBHelper
+from quotebot.database import DBHelper
 from discord.ext import commands
 
 print("Loading quotebot...")
@@ -40,15 +40,16 @@ if __name__ == '__main__':
     # Load all our cogs, then run the bot
     print("Loading extensions...")
     bot.ext_names = [
-        'cogs.ping',
-        'cogs.stats',
-        'cogs.guild_config',
-        'cogs.quote',
-        'cogs.unquote',
-        'cogs.reload',
-        'cogs.invite',
+        'ping',
+        'stats',
+        'guild_config',
+        'quote',
+        'unquote',
+        'reload',
+        'invite',
     ]
     for extension in bot.ext_names:
+        ext_name = f'quotebot.cogs.{extension}'
         try:
             bot.load_extension(extension)
         except Exception as e:
