@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/FriendosClub/QuoteBot.svg?branch=v2)][3]
 [![Verified Discord Bot](https://i.imgur.com/cBmMaVV.png)][4]
+[![Discord](https://img.shields.io/discord/787118478569766932?color=7289DA&label=discord&logo=discord&logoColor=FFFFFF)][5]
 
 Tired of hitting the 50 message limit for pins? Use QuoteBot to save as many
 of your favorite messages as you want!
@@ -38,7 +39,7 @@ This section is subject to change.
    - [ ] Fix outstanding [issues][2]
    - [ ] Update commands to use new Discord functionality (i.e. links to messages)
    - [ ] Refactor old, poorly written code.
-   - [ ] Implement CI with Travis
+   - [x] Implement CI with Travis
    - [ ] Move bot documentation to GitHub Pages
    - [ ] Add `.github` with issue and PR templates
    - [ ] (stretch) Add cross-posting of quotes to QuoteBot's Discord (opt-in)
@@ -56,3 +57,4 @@ See [Working on QuoteBot](#) for information about the development process.
 [2]: https://github.com/FriendosClub/QuoteBot/issues
 [3]: https://travis-ci.org/FriendosClub/QuoteBot
 [4]: https://support.discord.com/hc/en-us/articles/360040720412-Bot-Verification-and-Data-Whitelisting
+[5]: https://discord.gg/QWqKfmZVG6
