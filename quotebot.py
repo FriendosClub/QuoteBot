@@ -44,12 +44,12 @@ if __name__ == '__main__':
     for extension in bot.ext_names:
         ext_name = f'quotebot.cogs.{extension}'
         try:
-            bot.load_extension(extension)
+            bot.load_extension(ext_name)
         except Exception as e:
-            print(f"> Failed to load extension {extension}")
+            print(f"> Failed to load extension {ext_name}")
             raise e
         else:
-            print(f"> Loaded {extension[5:]}")
+            print(f"> Loaded {ext_name}")
 
     print("Starting quotebot...")
     bot.run(cfg['token'], reconnect=True)
