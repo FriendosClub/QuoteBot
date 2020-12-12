@@ -28,13 +28,6 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}#{bot.user.discriminator}")
     print(f"> Connected to {len(bot.guilds)} guilds")
 
-    total_members = 0
-    for guild in bot.guilds:
-        for member in guild.members:
-            total_members += 1
-
-    print(f"> Serving {total_members} members")
-
 
 if __name__ == '__main__':
     # Load all our cogs, then run the bot
